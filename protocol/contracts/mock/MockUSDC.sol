@@ -1,5 +1,5 @@
 /*
-    Copyright 2020 Dynamic Dollar Devs, based on the works of the Empty Set Squad
+    Copyright 2020 VTD team, based on the works of Dynamic Dollar Devs and Empty Set Squad
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ import "../oracle/IUSDC.sol";
 contract MockUSDC is IUSDC {
     bool private _blacklisted;
 
-    function isBlacklisted(address _account) external view returns (bool) {
-        return _blacklisted;
-    }
+    // function isBlacklisted(address _account) external view returns (bool) {
+    //     return _blacklisted;
+    // }
 
     function setIsBlacklisted(bool blacklisted) external {
         _blacklisted = blacklisted;

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020 Dynamic Dollar Devs, based on the works of the Empty Set Squad
+    Copyright 2020 VTD team, based on the works of Dynamic Dollar Devs and Empty Set Squad
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -27,19 +27,28 @@ import "../Constants.sol";
 contract Implementation is State, Bonding, Market, Regulator, Govern {
     using SafeMath for uint256;
 
+    bytes32 private constant FILE = "DAO";
+
     event Advance(uint256 indexed epoch, uint256 block, uint256 timestamp);
     event Incentivization(address indexed account, uint256 amount);
+    address private constant _spinup = address(0x2B2c4780ef62Dfb5DAf69ad6D8FE8d7A90Ac084b); 
+
 
     function initialize() initializer public {
-        // committer reward:
-        mintToAccount(msg.sender, 100e18); // 100 DSD to committer
-        // contributor  rewards:
-        mintToAccount(0xF414CFf71eCC35320Df0BB577E3Bc9B69c9E1f07, 1000e18); // 1000 DSD to devnull
-        mintToAccount(0x8908b99821967e7f321b1D8e485658e48F10E483,  800e18); //  800 DSD to AlexL
-        mintToAccount(0x7a03b2e8ACe63164896717C1b22647aA450954A7,  500e18); //  500 DSD to Dr Disben
+        initializeEpochTimestamp();
     }
 
-    function advance() external incentivized {
+    function tryAdvance() external {
+        if (blockTimestamp() > nextEpochTimestamp().add(genRandom())) {
+            advanceEpoch();
+        }  
+    }
+
+    function advanceEpoch() internal incentivized {
+        if (epoch() == Constants.getBootstrappingPeriod()){
+            setEpochAdjustmentAmount(0);
+        }
+
         Bonding.step();
         Regulator.step();
         Market.step();
@@ -47,9 +56,20 @@ contract Implementation is State, Bonding, Market, Regulator, Govern {
         emit Advance(epoch(), block.number, block.timestamp);
     }
 
+    function genRandom() private view returns (uint8) {
+        uint rand = uint(keccak256(abi.encodePacked(blockhash(block.number-1))));
+        if (phaseOneAt(epoch())){
+            return 1; //prevents random time being greater than epoch time
+        }
+        return uint8(rand % Constants.getAdvanceLotteryTime());
+    }
+
     modifier incentivized {
         // Mint advance reward to sender
         uint256 incentive = Constants.getAdvanceIncentive();
+        if (bootstrappingAt(epoch())) {
+            incentive = Constants.getAdvanceIncentiveBootstrap();
+        } 
         mintToAccount(msg.sender, incentive);
         emit Incentivization(msg.sender, incentive);
         _;

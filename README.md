@@ -1,30 +1,30 @@
-# Dynamic Set Dollar
+# Variable Time Dollar
 
-- shorthand name: `dynamic dollar`
-- full name: `Dynamic Set Dollar`
-- symbol: `DSD`
+- shorthand name: `VTD`
+- full name: `Variable Time Dollar`
+- symbol: `VTD`
 - decimals: `18`
 - icon:
 
-![DSD Logo](https://dsd.finance/logo.png)
 
 ## contracts
 ### mainnet
-- `0x6Bf977ED1A09214E6209F4EA5f525261f1A2690a` **DAO (DSDS)**
-- `0xbd2f0cd039e0bfcf88901c98c0bfac5ab27566e3` **DSD**
-- `0xe2e279d1b911bad880d1104a750dfcd262fb6cf4` **Oracle**
-- `0x66e33d2605c5fb25ebb7cd7528e7997b0afa55e8` **UniswapV2 USDC:DSD Pair**
-- `0x70A87e1b97436D2F194B8B9EBF337bFc7521C70f` **LP Incentivation Pool**
+- `0x530608409991C36Ba922B69623BEc57e22B8d331` **DAO (VTD)**
+- `0xbd2f0cd039e0bfcf88901c98c0bfac5ab27566e3` **Pegged Token: DSD**
+- `0xf0E3543744AFcEd8042131582f2A19b6AEb82794` **VTD Token**
+- `0xc0D668F7d2C99Ac40Cf7824663A00488F2802516` **Oracle**
+- `0x2008dDa1Ad792b156599cE55D12Eb82808C80f01` **UniswapV2 VTD:DSD Pair**
+- `0x623EA23a36bF98a065701B08Be1Ad17246d0E337` **LP Incentivation Pool**
 
 ## audit of forked codebase
 
-is available [here](https://github.com/dynamicdollardevs/dsd/blob/master/audit/REP-Dollar-06-11-20.pdf).
+is available [here](https://github.com/variabletime/vtd-protocol/blob/master/audit/REP-Dollar-06-11-20.pdf).
 
 ## disclaimer
 this project is an experiment - the protocol is audited, and we've put a significant amount of work into testing as well as generally de-risking the design of its core mechanism, however participants should take great caution as bugs resulting in loss of funds are always a possibility.
 
 ```
-Copyright 2020 Dynamic Dollar Devs, based on the works of the Empty Set Squad
+Copyright 2020 VTD team, based on Dynamic Dollar Devs and the Empty Set Squad's work.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use the included code except in compliance with the License.

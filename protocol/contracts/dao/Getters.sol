@@ -1,5 +1,5 @@
 /*
-    Copyright 2020 Dynamic Dollar Devs, based on the works of the Empty Set Squad
+    Copyright 2020 VTD team, based on the works of Dynamic Dollar Devs and Empty Set Squad
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -32,11 +32,11 @@ contract Getters is State {
      */
 
     function name() public view returns (string memory) {
-        return "Dynamic Set Dollar Stake";
+        return "VTD Stake";
     }
 
     function symbol() public view returns (string memory) {
-        return "DSDS";
+        return "VTDD";
     }
 
     function decimals() public view returns (uint8) {
@@ -126,6 +126,14 @@ contract Getters is State {
         return epoch() >= _state.accounts[account].fluidUntil ? Account.Status.Frozen : Account.Status.Fluid;
     }
 
+    function fluidUntil(address account) public view returns (uint256) {
+        return _state.accounts[account].fluidUntil;
+    }
+
+    function lockedUntil(address account) public view returns (uint256) {
+        return _state.accounts[account].lockedUntil;
+    }
+
     function allowanceCoupons(address owner, address spender) public view returns (uint256) {
         return _state.accounts[owner].couponAllowances[spender];
     }
@@ -138,17 +146,44 @@ contract Getters is State {
         return _state.epoch.current;
     }
 
-    function epochTime() public view returns (uint256) {
-        Constants.EpochStrategy memory current = Constants.getEpochStrategy();
-
-        return epochTimeWithStrategy(current);
+    function epochAdjustmentAmount() internal view returns (uint256) {
+        return _state.epoch.adjustmentAmount;
     }
 
-    function epochTimeWithStrategy(Constants.EpochStrategy memory strategy) private view returns (uint256) {
-        return blockTimestamp()
-            .sub(strategy.start)
-            .div(strategy.period)
-            .add(strategy.offset);
+    function epochBase() internal view returns (uint256) {
+        if (phaseOneAt(epoch())) {
+            return Constants.getP1EpochBase();
+        } else {
+            return Constants.getEpochBase();
+        }
+    }
+
+   function epochGrowthConstant() internal view returns (uint256) {
+        if (phaseOneAt(epoch())) {
+            return Constants.getP1EpochGrowthConstant();
+        } else {
+            return Constants.getEpochGrowthConstant();
+        }
+    }
+
+    function previousEpochTimestamp() public view returns (uint256) {
+        return _state.epoch.previousEpochTimestamp;
+    }
+
+    function currentEpochLength() public view returns (uint256) {
+        return epochAdjustmentAmount().add(epochBase());
+    }
+
+    function nextEpochTimestamp() public view returns (uint256) {
+        return previousEpochTimestamp().add(currentEpochLength());
+    }
+
+    function epochTime() public view returns (uint256) {
+        if (blockTimestamp() > nextEpochTimestamp()) {
+            return epoch().add(1);
+        } else {
+            return epoch();
+        }
     }
 
     // Overridable for testing
@@ -179,6 +214,11 @@ contract Getters is State {
     function bootstrappingAt(uint256 epoch) public view returns (bool) {
         return epoch <= Constants.getBootstrappingPeriod();
     }
+
+    function phaseOneAt(uint256 epoch) public view returns (bool) {
+        return epoch <= Constants.getPhaseOnePeriod();
+    }
+
 
     /**
      * Governance

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020 Dynamic Dollar Devs, based on the works of the Empty Set Squad
+    Copyright 2020 VTD team, based on the works of Dynamic Dollar Devs and Empty Set Squad
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -124,9 +124,9 @@ contract Govern is Setters, Permission, Upgradeable {
         );
 
         Require.that(
-            epochTime() > epoch().add(Constants.getGovernanceEmergencyDelay()),
+            blockTimestamp() > previousEpochTimestamp().add(Constants.getGovernanceEmergencyDelay()),
             FILE,
-            "Epoch synced"
+            "Emergency delay not met"
         );
 
         Require.that(
@@ -152,6 +152,6 @@ contract Govern is Setters, Permission, Upgradeable {
         }
 
         Decimal.D256 memory stake = Decimal.ratio(balanceOf(account), totalSupply());
-        return stake.greaterThan(Decimal.ratio(1, 100)); // 1%
+        return stake.greaterThan(Decimal.ratio(1, 200)); // 0.5%
     }
 }

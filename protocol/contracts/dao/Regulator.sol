@@ -1,5 +1,5 @@
 /*
-    Copyright 2020 Dynamic Dollar Devs, based on the works of the Empty Set Squad
+    Copyright 2020 VTD team, based on the works of Dynamic Dollar Devs and Empty Set Squad
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ contract Regulator is Comptroller {
     event SupplyIncrease(uint256 indexed epoch, uint256 price, uint256 newRedeemable, uint256 lessDebt, uint256 newBonded);
     event SupplyDecrease(uint256 indexed epoch, uint256 price, uint256 newDebt);
     event SupplyNeutral(uint256 indexed epoch);
+    event EpochTimeVariable(uint256 epochPeriod);
 
     function step() internal {
         Decimal.D256 memory price = oracleCapture();
@@ -51,6 +52,7 @@ contract Regulator is Comptroller {
         Decimal.D256 memory delta = limit(Decimal.one().sub(price));
         uint256 newDebt = delta.mul(totalNet()).asUint256();
         increaseDebt(newDebt);
+        shrinkEpoch(delta);
 
         emit SupplyDecrease(epoch(), price.value, newDebt);
         return;
@@ -60,7 +62,19 @@ contract Regulator is Comptroller {
         Decimal.D256 memory delta = limit(price.sub(Decimal.one()).div(Constants.getSupplyChangeDivisor()));
         uint256 newSupply = delta.mul(totalNet()).asUint256();
         (uint256 newRedeemable, uint256 lessDebt, uint256 newBonded) = increaseSupply(newSupply);
+        growEpoch(delta);
+
         emit SupplyIncrease(epoch(), price.value, newRedeemable, lessDebt, newBonded);
+    }
+
+    function growEpoch(Decimal.D256 memory delta) private {
+        uint256 newAdjustmentAmount = Decimal.one().sub(delta).mul(epochAdjustmentAmount()).add(delta.mul(epochGrowthConstant())).asUint256();
+        setEpochAdjustmentAmount(newAdjustmentAmount);
+    }
+
+    function shrinkEpoch(Decimal.D256 memory delta) private {
+        uint256 newAdjustmentAmount = Decimal.one().sub(delta).mul(epochAdjustmentAmount()).asUint256();
+        setEpochAdjustmentAmount(newAdjustmentAmount);
     }
 
     function limit(Decimal.D256 memory delta) private view returns (Decimal.D256 memory) {

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020 Dynamic Dollar Devs, based on the works of the Empty Set Squad
+    Copyright 2020 VTD team, based on the works of Dynamic Dollar Devs and Empty Set Squad
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -24,42 +24,43 @@ library Constants {
     uint256 private constant CHAIN_ID = 1; // Mainnet
 
     /* Bootstrapping */
-    uint256 private constant BOOTSTRAPPING_PERIOD = 150; // 150 epochs
-    uint256 private constant BOOTSTRAPPING_PRICE = 154e16; // 1.54 USDC (targeting 4.5% inflation)
+    uint256 private constant BOOTSTRAPPING_PERIOD = 36; // 60 epochs IMPORTANT
+    uint256 private constant BOOTSTRAPPING_PERIOD_PHASE1 = 11; // 12 epochs to speed up deployment IMPORTANT
+    uint256 private constant BOOTSTRAPPING_PRICE = 172e16; // 1.72 pegged token (targeting 6% inflation)
 
     /* Oracle */
-    address private constant USDC = address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
-    uint256 private constant ORACLE_RESERVE_MINIMUM = 1e10; // 10,000 USDC
+    //pegs to DSD during bootstrap. variable name not renamed on purpose until DAO votes on the peg.
+    //IMPORTANT 0xBD2F0Cd039E0BFcf88901C98c0bFAc5ab27566e3
+    address private constant USDC = address(0xBD2F0Cd039E0BFcf88901C98c0bFAc5ab27566e3); 
+    uint256 private constant ORACLE_RESERVE_MINIMUM = 1e9; // 1,000 pegged token, 1e9 IMPORTANT
 
     /* Bonding */
-    uint256 private constant INITIAL_STAKE_MULTIPLE = 1e6; // 100 DSD -> 100M DSDS
+    uint256 private constant INITIAL_STAKE_MULTIPLE = 1e6; // 100 VTD -> 100M VTDD
 
     /* Epoch */
-    struct EpochStrategy {
-        uint256 offset;
-        uint256 start;
-        uint256 period;
-    }
-
-    uint256 private constant EPOCH_OFFSET = 0;
-    uint256 private constant EPOCH_START = 1606348800;
-    uint256 private constant EPOCH_PERIOD = 7200;
+    uint256 private constant EPOCH_START = 1609405200;
+    uint256 private constant EPOCH_BASE = 7200; //two hours IMPORTANT
+    uint256 private constant EPOCH_GROWTH_CONSTANT = 12000; //3.3 hrs
+    uint256 private constant P1_EPOCH_BASE = 300; // IMPORTANT
+    uint256 private constant P1_EPOCH_GROWTH_CONSTANT = 2000; // IMPORTANT
+    uint256 private constant ADVANCE_LOTTERY_TIME = 120; // 2 minutes
 
     /* Governance */
-    uint256 private constant GOVERNANCE_PERIOD = 36;
-    uint256 private constant GOVERNANCE_QUORUM = 33e16; // 33%
-    uint256 private constant GOVERNANCE_SUPER_MAJORITY = 66e16; // 66%
-    uint256 private constant GOVERNANCE_EMERGENCY_DELAY = 6; // 6 epochs
+    uint256 private constant GOVERNANCE_PERIOD = 12; // 1 dayish governance period IMPORTANT
+    uint256 private constant GOVERNANCE_QUORUM = 20e16; // 20%
+    uint256 private constant GOVERNANCE_SUPER_MAJORITY = 51e16; // 51%
+    uint256 private constant GOVERNANCE_EMERGENCY_DELAY = 21600; // 6 hours
 
     /* DAO */
-    uint256 private constant ADVANCE_INCENTIVE = 50e18; // 50 DSD
-    uint256 private constant DAO_EXIT_LOCKUP_EPOCHS = 36; // 36 epochs fluid
+    uint256 private constant ADVANCE_INCENTIVE = 50e18; // 50 VTD
+    uint256 private constant ADVANCE_INCENTIVE_BOOTSTRAP = 100e18; // 100 VTD during phase 1 bootstrap
+    uint256 private constant DAO_EXIT_LOCKUP_EPOCHS = 18; // 18 epoch fluid IMPORTANT
 
     /* Pool */
-    uint256 private constant POOL_EXIT_LOCKUP_EPOCHS = 12; // 12 epochs fluid
+    uint256 private constant POOL_EXIT_LOCKUP_EPOCHS = 9; // 9 epoch fluid IMPORTANT
 
     /* Market */
-    uint256 private constant COUPON_EXPIRATION = 360;
+    uint256 private constant COUPON_EXPIRATION = 180; //30 days
     uint256 private constant DEBT_RATIO_CAP = 35e16; // 35%
     uint256 private constant INITIAL_COUPON_REDEMPTION_PENALTY = 50e16; // 50%
     uint256 private constant COUPON_REDEMPTION_PENALTY_DECAY = 3600; // 1 hour
@@ -67,11 +68,31 @@ library Constants {
     /* Regulator */
     uint256 private constant SUPPLY_CHANGE_DIVISOR = 12e18; // 12
     uint256 private constant SUPPLY_CHANGE_LIMIT = 10e16; // 10%
-    uint256 private constant ORACLE_POOL_RATIO = 40; // 40%
+    uint256 private constant ORACLE_POOL_RATIO = 30; // 30%
 
     /**
      * Getters
      */
+    function getEpochStart() internal pure returns (uint256) {
+        return EPOCH_START;
+    }
+
+    function getP1EpochBase() internal pure returns (uint256) {
+        return P1_EPOCH_BASE;
+    }
+
+    function getP1EpochGrowthConstant() internal pure returns (uint256) {
+        return P1_EPOCH_GROWTH_CONSTANT;
+    }
+
+    function getEpochBase() internal pure returns (uint256) {
+        return EPOCH_BASE;
+    }
+
+    function getEpochGrowthConstant() internal pure returns (uint256) {
+        return EPOCH_GROWTH_CONSTANT;
+    }
+
     function getUsdcAddress() internal pure returns (address) {
         return USDC;
     }
@@ -80,20 +101,20 @@ library Constants {
         return ORACLE_RESERVE_MINIMUM;
     }
 
-    function getEpochStrategy() internal pure returns (EpochStrategy memory) {
-        return EpochStrategy({
-            offset: EPOCH_OFFSET,
-            start: EPOCH_START,
-            period: EPOCH_PERIOD
-        });
-    }
-
     function getInitialStakeMultiple() internal pure returns (uint256) {
         return INITIAL_STAKE_MULTIPLE;
     }
 
+    function getAdvanceLotteryTime() internal pure returns (uint256){
+        return ADVANCE_LOTTERY_TIME;
+    }
+
     function getBootstrappingPeriod() internal pure returns (uint256) {
         return BOOTSTRAPPING_PERIOD;
+    }
+
+    function getPhaseOnePeriod() internal pure returns (uint256) {
+        return BOOTSTRAPPING_PERIOD_PHASE1;
     }
 
     function getBootstrappingPrice() internal pure returns (Decimal.D256 memory) {
@@ -118,6 +139,10 @@ library Constants {
 
     function getAdvanceIncentive() internal pure returns (uint256) {
         return ADVANCE_INCENTIVE;
+    }
+
+    function getAdvanceIncentiveBootstrap() internal pure returns (uint256) {
+        return ADVANCE_INCENTIVE_BOOTSTRAP;
     }
 
     function getDAOExitLockupEpochs() internal pure returns (uint256) {

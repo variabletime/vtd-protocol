@@ -1,5 +1,5 @@
 /*
-    Copyright 2020 Dynamic Dollar Devs, based on the works of the Empty Set Squad
+    Copyright 2020 VTD team, based on the works of Dynamic Dollar Devs and Empty Set Squad
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ contract Oracle is IOracle {
     function updateOracle() private returns (Decimal.D256 memory, bool) {
         Decimal.D256 memory price = updatePrice();
         uint256 lastReserve = updateReserve();
-        bool isBlacklisted = IUSDC(usdc()).isBlacklisted(address(_pair));
+        // bool isBlacklisted = IUSDC(usdc()).isBlacklisted(address(_pair));
 
         bool valid = true;
         if (lastReserve < Constants.getOracleReserveMinimum()) {
@@ -104,9 +104,9 @@ contract Oracle is IOracle {
         if (_reserve < Constants.getOracleReserveMinimum()) {
             valid = false;
         }
-        if (isBlacklisted) {
-            valid = false;
-        }
+        // if (isBlacklisted) {
+        //     valid = false;
+        // }
 
         return (price, valid);
     }
@@ -121,7 +121,10 @@ contract Oracle is IOracle {
         _timestamp = blockTimestamp;
         _cumulative = priceCumulative;
 
-        return price.mul(1e12);
+        //IMPORTANT this need to be based upon decimal precision of the pegged token
+        // .mul(1e12) for USDC which is 6 decimal
+        // return price.mul(1e12);
+        return price;
     }
 
     function updateReserve() private returns (uint256) {

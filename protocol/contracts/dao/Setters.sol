@@ -1,5 +1,5 @@
 /*
-    Copyright 2020 Dynamic Dollar Devs, based on the works of the Empty Set Squad
+    Copyright 2020 VTD team, based on the works of Dynamic Dollar Devs and Empty Set Squad
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -133,6 +133,19 @@ contract Setters is State, Getters {
 
     function incrementEpoch() internal {
         _state.epoch.current = _state.epoch.current.add(1);
+        setEpochTimestamp();
+    }
+
+    function setEpochAdjustmentAmount(uint256 adjustmentAmount) internal {
+        _state.epoch.adjustmentAmount = adjustmentAmount;
+    }
+
+    function initializeEpochTimestamp() internal {
+        _state.epoch.previousEpochTimestamp = Constants.getEpochStart();
+    }
+
+    function setEpochTimestamp() internal {
+        _state.epoch.previousEpochTimestamp = blockTimestamp();
     }
 
     function snapshotTotalBonded() internal {

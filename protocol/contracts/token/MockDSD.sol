@@ -19,15 +19,34 @@ pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
+import "@openzeppelin/contracts/access/roles/MinterRole.sol";
+import "../token/Permittable.sol";
+import "../token/IDollar.sol";
 
-contract MockToken is ERC20Detailed, ERC20Burnable {
-    constructor(string memory name, string memory symbol, uint8 decimals)
-    ERC20Detailed(name, symbol, decimals)
+
+contract MockDSD is IDollar, MinterRole, ERC20Detailed, Permittable, ERC20Burnable  {
+
+    constructor()
+    ERC20Detailed("MOCKDSD", "MOCKDSD", 18)
+    Permittable()
     public
-    { }
+    { 
+        _mint(msg.sender, 100000000000000000000000);
+    }
 
-    function mint(address account, uint256 amount) external returns (bool) {
+    function mint(address account, uint256 amount) public onlyMinter returns (bool) {
         _mint(account, amount);
+        return true;
+    }
+
+    function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
+        _transfer(sender, recipient, amount);
+        if (allowance(sender, _msgSender()) != uint256(-1)) {
+            _approve(
+                sender,
+                _msgSender(),
+                allowance(sender, _msgSender()).sub(amount, "Dollar: transfer amount exceeds allowance"));
+        }
         return true;
     }
 }
