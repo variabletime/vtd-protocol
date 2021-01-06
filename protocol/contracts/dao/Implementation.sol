@@ -35,7 +35,6 @@ contract Implementation is State, Bonding, Market, Regulator, Govern {
 
 
     function initialize() initializer public {
-        initializeEpochTimestamp();
     }
 
     function tryAdvance() external {
@@ -58,9 +57,6 @@ contract Implementation is State, Bonding, Market, Regulator, Govern {
 
     function genRandom() private view returns (uint8) {
         uint rand = uint(keccak256(abi.encodePacked(blockhash(block.number-1))));
-        if (phaseOneAt(epoch())){
-            return 1; //prevents random time being greater than epoch time
-        }
         return uint8(rand % Constants.getAdvanceLotteryTime());
     }
 

@@ -24,7 +24,7 @@ library Constants {
     uint256 private constant CHAIN_ID = 1; // Mainnet
 
     /* Bootstrapping */
-    uint256 private constant BOOTSTRAPPING_PERIOD = 36; // 60 epochs IMPORTANT
+    uint256 private constant BOOTSTRAPPING_PERIOD = 36; // 36 epochs IMPORTANT
     uint256 private constant BOOTSTRAPPING_PERIOD_PHASE1 = 11; // 12 epochs to speed up deployment IMPORTANT
     uint256 private constant BOOTSTRAPPING_PRICE = 172e16; // 1.72 pegged token (targeting 6% inflation)
 
@@ -43,7 +43,7 @@ library Constants {
     uint256 private constant EPOCH_GROWTH_CONSTANT = 12000; //3.3 hrs
     uint256 private constant P1_EPOCH_BASE = 300; // IMPORTANT
     uint256 private constant P1_EPOCH_GROWTH_CONSTANT = 2000; // IMPORTANT
-    uint256 private constant ADVANCE_LOTTERY_TIME = 120; // 2 minutes
+    uint256 private constant ADVANCE_LOTTERY_TIME = 91; // 7 average block lengths
 
     /* Governance */
     uint256 private constant GOVERNANCE_PERIOD = 12; // 1 dayish governance period IMPORTANT
