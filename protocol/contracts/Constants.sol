@@ -46,7 +46,7 @@ library Constants {
     uint256 private constant ADVANCE_LOTTERY_TIME = 91; // 7 average block lengths
 
     /* Governance */
-    uint256 private constant GOVERNANCE_PERIOD = 12; // 1 dayish governance period IMPORTANT
+    uint256 private constant GOVERNANCE_PERIOD = 8; // 1 dayish governance period IMPORTANT
     uint256 private constant GOVERNANCE_QUORUM = 20e16; // 20%
     uint256 private constant GOVERNANCE_SUPER_MAJORITY = 51e16; // 51%
     uint256 private constant GOVERNANCE_EMERGENCY_DELAY = 21600; // 6 hours
