@@ -39,6 +39,12 @@ contract Implementation is State, Bonding, Market, Regulator, Govern {
     }
 
     function tryAdvance() external {
+        Require.that(
+            tx.gasprice <= 300e9, //prevent 12k gas bots, max is 300gwei
+            FILE,
+            "Gas too high"
+        );
+
         if (blockTimestamp() > nextEpochTimestamp().add(genRandom())) {
             advanceEpoch();
         }  
