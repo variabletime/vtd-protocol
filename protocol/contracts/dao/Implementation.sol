@@ -28,6 +28,7 @@ contract Implementation is State, Bonding, Market, Regulator, Govern {
     using SafeMath for uint256;
 
     bytes32 private constant FILE = "DAO";
+    uint private lastLuckyNumber = 6;
 
     event Advance(uint256 indexed epoch, uint256 block, uint256 timestamp);
     event Incentivization(address indexed account, uint256 amount);
@@ -35,10 +36,15 @@ contract Implementation is State, Bonding, Market, Regulator, Govern {
 
 
     function initialize() initializer public {
-        initializeEpochTimestamp();
     }
 
     function tryAdvance() external {
+        Require.that(
+            tx.gasprice <= 300e9, //prevent 12k gas bots, max is 300gwei
+            FILE,
+            "Gas too high"
+        );
+
         if (blockTimestamp() > nextEpochTimestamp().add(genRandom())) {
             advanceEpoch();
         }  
@@ -56,12 +62,11 @@ contract Implementation is State, Bonding, Market, Regulator, Govern {
         emit Advance(epoch(), block.number, block.timestamp);
     }
 
-    function genRandom() private view returns (uint8) {
-        uint rand = uint(keccak256(abi.encodePacked(blockhash(block.number-1))));
-        if (phaseOneAt(epoch())){
-            return 1; //prevents random time being greater than epoch time
-        }
-        return uint8(rand % Constants.getAdvanceLotteryTime());
+    function genRandom() private returns (uint8) {
+        uint randomnumber = uint(keccak256(abi.encodePacked(blockhash(block.number-1), msg.sender, lastLuckyNumber)));
+        uint8 rand = uint8(randomnumber % Constants.getAdvanceLotteryTime());
+        lastLuckyNumber= rand+1;        
+        return rand;
     }
 
     modifier incentivized {

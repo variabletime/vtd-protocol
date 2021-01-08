@@ -24,9 +24,9 @@ library Constants {
     uint256 private constant CHAIN_ID = 1; // Mainnet
 
     /* Bootstrapping */
-    uint256 private constant BOOTSTRAPPING_PERIOD = 36; // 60 epochs IMPORTANT
+    uint256 private constant BOOTSTRAPPING_PERIOD = 36; // 36 epochs IMPORTANT
     uint256 private constant BOOTSTRAPPING_PERIOD_PHASE1 = 11; // 12 epochs to speed up deployment IMPORTANT
-    uint256 private constant BOOTSTRAPPING_PRICE = 172e16; // 1.72 pegged token (targeting 6% inflation)
+    uint256 private constant BOOTSTRAPPING_PRICE = 196e16; // 1.96 pegged token (targeting 8% inflation)
 
     /* Oracle */
     //pegs to DSD during bootstrap. variable name not renamed on purpose until DAO votes on the peg.
@@ -43,17 +43,17 @@ library Constants {
     uint256 private constant EPOCH_GROWTH_CONSTANT = 12000; //3.3 hrs
     uint256 private constant P1_EPOCH_BASE = 300; // IMPORTANT
     uint256 private constant P1_EPOCH_GROWTH_CONSTANT = 2000; // IMPORTANT
-    uint256 private constant ADVANCE_LOTTERY_TIME = 120; // 2 minutes
+    uint256 private constant ADVANCE_LOTTERY_TIME = 91; // 7 average block lengths
 
     /* Governance */
-    uint256 private constant GOVERNANCE_PERIOD = 12; // 1 dayish governance period IMPORTANT
+    uint256 private constant GOVERNANCE_PERIOD = 8; // 1 dayish governance period IMPORTANT
     uint256 private constant GOVERNANCE_QUORUM = 20e16; // 20%
     uint256 private constant GOVERNANCE_SUPER_MAJORITY = 51e16; // 51%
     uint256 private constant GOVERNANCE_EMERGENCY_DELAY = 21600; // 6 hours
 
     /* DAO */
     uint256 private constant ADVANCE_INCENTIVE = 50e18; // 50 VTD
-    uint256 private constant ADVANCE_INCENTIVE_BOOTSTRAP = 100e18; // 100 VTD during phase 1 bootstrap
+    uint256 private constant ADVANCE_INCENTIVE_BOOTSTRAP = 50e18; // 100 VTD during phase 1 bootstrap
     uint256 private constant DAO_EXIT_LOCKUP_EPOCHS = 18; // 18 epoch fluid IMPORTANT
 
     /* Pool */
