@@ -25,7 +25,7 @@ library Constants {
 
     /* Bootstrapping */
     uint256 private constant BOOTSTRAPPING_PERIOD = 36; // 36 epochs IMPORTANT
-    uint256 private constant BOOTSTRAPPING_PERIOD_PHASE1 = 11; // 12 epochs to speed up deployment IMPORTANT
+    uint256 private constant BOOTSTRAPPING_PERIOD_PHASE1 = 0; // 12 epochs to speed up deployment IMPORTANT
     uint256 private constant BOOTSTRAPPING_PRICE = 196e16; // 1.96 pegged token (targeting 8% inflation)
 
     /* Oracle */
@@ -40,7 +40,7 @@ library Constants {
     /* Epoch */
     uint256 private constant EPOCH_START = 1609405200;
     uint256 private constant EPOCH_BASE = 7200; //two hours IMPORTANT
-    uint256 private constant EPOCH_GROWTH_CONSTANT = 12000; //3.3 hrs
+    uint256 private constant EPOCH_GROWTH_CONSTANT = 3600; //1 hour
     uint256 private constant P1_EPOCH_BASE = 300; // IMPORTANT
     uint256 private constant P1_EPOCH_GROWTH_CONSTANT = 2000; // IMPORTANT
     uint256 private constant ADVANCE_LOTTERY_TIME = 91; // 7 average block lengths
@@ -49,6 +49,7 @@ library Constants {
     uint256 private constant GOVERNANCE_PERIOD = 8; // 1 dayish governance period IMPORTANT
     uint256 private constant GOVERNANCE_QUORUM = 20e16; // 20%
     uint256 private constant GOVERNANCE_SUPER_MAJORITY = 51e16; // 51%
+    uint256 private constant GOVERNANCE_FASTTRACK_PERIOD = 3; // 51%
     uint256 private constant GOVERNANCE_EMERGENCY_DELAY = 21600; // 6 hours
 
     /* DAO */
@@ -66,8 +67,8 @@ library Constants {
     uint256 private constant COUPON_REDEMPTION_PENALTY_DECAY = 3600; // 1 hour
 
     /* Regulator */
-    uint256 private constant SUPPLY_CHANGE_DIVISOR = 12e18; // 12
     uint256 private constant SUPPLY_CHANGE_LIMIT = 10e16; // 10%
+    uint256 private constant EPOCH_GROWTH_BETA = 90e16; // 90%
     uint256 private constant ORACLE_POOL_RATIO = 30; // 30%
 
     /**
@@ -125,6 +126,10 @@ library Constants {
         return GOVERNANCE_PERIOD;
     }
 
+     function getFastTrackPeriod() internal pure returns (uint256) {
+        return GOVERNANCE_FASTTRACK_PERIOD;
+    }
+
     function getGovernanceQuorum() internal pure returns (Decimal.D256 memory) {
         return Decimal.D256({value: GOVERNANCE_QUORUM});
     }
@@ -173,8 +178,8 @@ library Constants {
         return Decimal.D256({value: SUPPLY_CHANGE_LIMIT});
     }
 
-    function getSupplyChangeDivisor() internal pure returns (Decimal.D256 memory) {
-        return Decimal.D256({value: SUPPLY_CHANGE_DIVISOR});
+    function getEpochGrowthBeta() internal pure returns (Decimal.D256 memory) {
+        return Decimal.D256({value: EPOCH_GROWTH_BETA});
     }
 
     function getOraclePoolRatio() internal pure returns (uint256) {

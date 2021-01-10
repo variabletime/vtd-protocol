@@ -38,19 +38,7 @@ contract Implementation is State, Bonding, Market, Regulator, Govern {
     function initialize() initializer public {
     }
 
-    function tryAdvance() external {
-        Require.that(
-            tx.gasprice <= 300e9, //prevent 12k gas bots, max is 300gwei
-            FILE,
-            "Gas too high"
-        );
-
-        if (blockTimestamp() > nextEpochTimestamp().add(genRandom())) {
-            advanceEpoch();
-        }  
-    }
-
-    function advanceEpoch() internal incentivized {
+    function tryAdvance() public incentivized {
         if (epoch() == Constants.getBootstrappingPeriod()){
             setEpochAdjustmentAmount(0);
         }
@@ -62,19 +50,14 @@ contract Implementation is State, Bonding, Market, Regulator, Govern {
         emit Advance(epoch(), block.number, block.timestamp);
     }
 
-    function genRandom() private returns (uint8) {
-        uint randomnumber = uint(keccak256(abi.encodePacked(blockhash(block.number-1), msg.sender, lastLuckyNumber)));
-        uint8 rand = uint8(randomnumber % Constants.getAdvanceLotteryTime());
-        lastLuckyNumber= rand+1;        
-        return rand;
-    }
-
     modifier incentivized {
         // Mint advance reward to sender
-        uint256 incentive = Constants.getAdvanceIncentive();
-        if (bootstrappingAt(epoch())) {
-            incentive = Constants.getAdvanceIncentiveBootstrap();
-        } 
+        uint256 limit = Constants.getAdvanceIncentive();
+
+        uint256 auction_price = blockTimestamp().sub(nextEpochTimestamp()).div(3).mul(1e18);
+
+        uint256 incentive = auction_price <= limit ? auction_price : limit;
+
         mintToAccount(msg.sender, incentive);
         emit Incentivization(msg.sender, incentive);
         _;

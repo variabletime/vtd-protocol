@@ -62,18 +62,19 @@ describe('VariableEpochTIming', function () {
         beforeEach(async function () {
           await this.oracle.set(220, 100, true);
           await this.regulator.stepE();
+          await this.regulator.setEpochAdjustmentAmountE(442)
         });
         it('epoch adjustment grows ', async function () 
         {
           expect(await this.regulator.epochAdjustmentAmount()).to.be.bignumber.equal(new BN(720));
         });
-        it('current epoch length is 7920', async function () 
+        it('current epoch length is 7642', async function () 
         {
-          expect(await this.regulator.currentEpochLength()).to.be.bignumber.equal(new BN(7920));
+          expect(await this.regulator.currentEpochLength()).to.be.bignumber.equal(new BN(7642));
         });
-        it('next epoch timestamp is 8020', async function () 
+        it('next epoch timestamp is 7742', async function () 
         {
-          expect(await this.regulator.nextEpochTimestamp()).to.be.bignumber.equal(new BN(8020));
+          expect(await this.regulator.nextEpochTimestamp()).to.be.bignumber.equal(new BN(7742));
         });
 
         describe('builds momentum', function () {
@@ -109,6 +110,25 @@ describe('VariableEpochTIming', function () {
           it('next epoch timestamp is 14485', async function () 
           {
             expect(await this.regulator.nextEpochTimestamp()).to.be.bignumber.equal(new BN(14485));
+          });
+
+        });
+        describe('maxes out', function () {
+          beforeEach(async function () {
+            await this.regulator.setEpochAdjustmentAmountE(6000)
+            await this.oracle.set(120, 100, true);
+            await this.regulator.stepE();
+            await this.regulator.incrementEpochE(); // 6
+            await this.regulator.setEpochTimestampE(100);
+
+          });
+          it('current epoch length is 14385', async function () 
+          {
+            expect(await this.regulator.currentEpochLength()).to.be.bignumber.equal(new BN(12960));
+          });
+          it('next epoch timestamp is 14485', async function () 
+          {
+            expect(await this.regulator.nextEpochTimestamp()).to.be.bignumber.equal(new BN(13060));
           });
 
         });
