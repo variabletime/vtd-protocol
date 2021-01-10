@@ -54,7 +54,7 @@ contract Implementation is State, Bonding, Market, Regulator, Govern {
         // Mint advance reward to sender
         uint256 limit = Constants.getAdvanceIncentive();
 
-        uint256 auction_price = blockTimestamp().sub(nextEpochTimestamp()).div(3).mul(1e18);
+        uint256 auction_price = blockTimestamp().sub(nextEpochTimestamp()).div(5).mul(1e18);
 
         uint256 incentive = auction_price <= limit ? auction_price : limit;
 
