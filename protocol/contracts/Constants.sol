@@ -25,7 +25,7 @@ library Constants {
 
     /* Bootstrapping */
     uint256 private constant BOOTSTRAPPING_PERIOD = 36; // 36 epochs IMPORTANT
-    uint256 private constant BOOTSTRAPPING_PERIOD_PHASE1 = 0; // 12 epochs to speed up deployment IMPORTANT
+    uint256 private constant BOOTSTRAPPING_PERIOD_PHASE1 = 0; // set to 0
     uint256 private constant BOOTSTRAPPING_PRICE = 196e16; // 1.96 pegged token (targeting 8% inflation)
 
     /* Oracle */
@@ -49,7 +49,7 @@ library Constants {
     uint256 private constant GOVERNANCE_PERIOD = 8; // 1 dayish governance period IMPORTANT
     uint256 private constant GOVERNANCE_QUORUM = 20e16; // 20%
     uint256 private constant GOVERNANCE_SUPER_MAJORITY = 51e16; // 51%
-    uint256 private constant GOVERNANCE_FASTTRACK_PERIOD = 3; // 51%
+    uint256 private constant GOVERNANCE_FASTTRACK_PERIOD = 3; // 3 epochs
     uint256 private constant GOVERNANCE_EMERGENCY_DELAY = 21600; // 6 hours
 
     /* DAO */
