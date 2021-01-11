@@ -17,7 +17,7 @@
  * phrase from a file you've .gitignored so it doesn't accidentally become public.
  *
  */
-const PrivateKeyProvider = require('truffle-privatekey-provider');
+const PrivateKeyProvider = require('@truffle/hdwallet-provider');
 const privateKey = process.env.YOUR_PRIVATE_KEY;
 const infuraId = process.env.YOUR_INFURA_ID;
 const etherscanKey = process.env.YOUR_ETHERSCAN_KEY;
@@ -52,7 +52,7 @@ module.exports = {
       provider: () => new PrivateKeyProvider(privateKey, 'https://mainnet.infura.io/v3/' + infuraId),
       network_id: 1,          // Mainnet's id
       gas: 5500000,           // Gas sent with each transaction (default: ~6700000)
-      gasPrice: 150000000000,  // 20 gwei (in wei) (default: 100 gwei)
+      gasPrice: 46000000000,  // 20 gwei (in wei) (default: 100 gwei)
       timeoutBlocks: 1440,  // # of blocks before a deployment times out  (minimum/default: 50)
     },
 
@@ -70,7 +70,8 @@ module.exports = {
     rinkeby: {
       provider: () => new PrivateKeyProvider(privateKey, 'https://rinkeby.infura.io/v3/' + infuraId),
       network_id: 4,       // rinkeby's id
-      gas: 5500000,        // rinkeby has a lower block limit than mainnet
+      gas: 5500000,  
+      gasPrice: 0,      // rinkeby has a lower block limit than mainnet
       // confirmations: 2,    // # of confs to wait between deployments. (default: 0)
       timeoutBlocks: 50000,  // # of blocks before a deployment times out  (minimum/default: 50)
       skipDryRun: true,     // Skip dry run before migrations? (default: false for public nets )

@@ -186,6 +186,10 @@ contract Getters is State {
         }
     }
 
+    function calcSupplyChangeFactor() public view returns (uint256) {
+        return SafeMath.div(86400, currentEpochLength()); //seconds in a day, avoid divide by zero
+    } 
+
     // Overridable for testing
     function blockTimestamp() internal view returns (uint256) {
         return block.timestamp;

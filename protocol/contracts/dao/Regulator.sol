@@ -59,7 +59,7 @@ contract Regulator is Comptroller {
     }
 
     function growSupply(Decimal.D256 memory price) private {
-        Decimal.D256 memory delta = limit(price.sub(Decimal.one()).div(Constants.getSupplyChangeDivisor()));
+        Decimal.D256 memory delta = limit(price.sub(Decimal.one()).div(calcSupplyChangeFactor()));
         uint256 newSupply = delta.mul(totalNet()).asUint256();
         (uint256 newRedeemable, uint256 lessDebt, uint256 newBonded) = increaseSupply(newSupply);
         growEpoch(delta);
@@ -68,7 +68,7 @@ contract Regulator is Comptroller {
     }
 
     function growEpoch(Decimal.D256 memory delta) private {
-        uint256 newAdjustmentAmount = Decimal.one().sub(delta).mul(epochAdjustmentAmount()).add(delta.mul(epochGrowthConstant())).asUint256();
+        uint256 newAdjustmentAmount = Constants.getEpochGrowthBeta().mul(epochAdjustmentAmount()).add(delta.mul(epochGrowthConstant())).asUint256();
         setEpochAdjustmentAmount(newAdjustmentAmount);
     }
 

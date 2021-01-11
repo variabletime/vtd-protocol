@@ -116,6 +116,38 @@ contract Govern is Setters, Permission, Upgradeable {
         emit Commit(msg.sender, candidate);
     }
 
+      function FastTrackCommit(address candidate) external {
+        Require.that(
+            isNominated(candidate),
+            FILE,
+            "Not nominated"
+        );
+
+        uint256 endsAfter = startFor(candidate).add(Constants.getFastTrackPeriod()).sub(1);
+
+        Require.that(
+            epoch() > endsAfter,
+            FILE,
+            "Not enough time"
+        );
+
+        Require.that(
+            Decimal.ratio(votesFor(candidate), totalBondedAt(endsAfter)).greaterThan(Constants.getGovernanceSuperMajority()),
+            FILE,
+            "Must have supermajority"
+        );
+
+        Require.that(
+            approveFor(candidate) > rejectFor(candidate),
+            FILE,
+            "Not approved"
+        );
+
+        upgradeTo(candidate);
+
+        emit Commit(msg.sender, candidate);
+    }
+
     function emergencyCommit(address candidate) external {
         Require.that(
             isNominated(candidate),
