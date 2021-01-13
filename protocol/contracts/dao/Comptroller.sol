@@ -166,7 +166,7 @@ contract Comptroller is Setters, PeggingSystem {
             dollar().mint(Constants.getUsdtPool(), usdtShare.mul(amount).asUint256().add(1));
             dollar().mint(Constants.getEthPool(), ethShare.mul(amount).asUint256().add(1));
             dollar().mint(Constants.getWbtcPool(), wbtcShare.mul(amount).asUint256().add(1));
-            dollar().mint(Constants.getWbtcPool(), usdcShare.mul(amount).asUint256().add(1));
+            dollar().mint(Constants.getUsdcPool(), usdcShare.mul(amount).asUint256().add(1));
         }
     }
 
