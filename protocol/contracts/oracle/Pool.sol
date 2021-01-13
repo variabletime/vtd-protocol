@@ -27,10 +27,13 @@ import "./Liquidity.sol";
 contract Pool is PoolSetters, Liquidity {
     using SafeMath for uint256;
 
-    constructor(address dollar, address univ2) public {
-        _state.provider.dao = IDAO(msg.sender);
+    constructor(address dollar, address univ2, address peggedToken) public {
+        // IMPORTANT only use msg.sender if deploying from the proxy factory
+        // _state.provider.dao = IDAO(msg.sender);
+        _state.provider.dao= IDAO(address(0x530608409991C36Ba922B69623BEc57e22B8d331));
         _state.provider.dollar = IDollar(dollar);
         _state.provider.univ2 = IERC20(univ2);
+        _state.provider.peggedToken = peggedToken;
     }
 
     bytes32 private constant FILE = "Pool";

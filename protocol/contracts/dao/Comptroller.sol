@@ -19,10 +19,12 @@ pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./Setters.sol";
+import "./PeggingSystem.sol";
 import "../external/Require.sol";
 
-contract Comptroller is Setters {
+contract Comptroller is Setters, PeggingSystem {
     using SafeMath for uint256;
+    using Decimal for Decimal.D256;
 
     bytes32 private constant FILE = "Comptroller";
 
@@ -158,7 +160,13 @@ contract Comptroller is Setters {
 
     function mintToPool(uint256 amount) private {
         if (amount > 0) {
-            dollar().mint(pool(), amount);
+            (Decimal.D256 memory dsdShare, Decimal.D256 memory usdtShare, Decimal.D256 memory ethShare, Decimal.D256 memory wbtcShare, Decimal.D256 memory usdcShare) = updateLiquidityForAllPools();
+        //   adds 1 to avoid dealing with zeros
+            dollar().mint(Constants.getDsdPool(), dsdShare.mul(amount).asUint256().add(1));
+            dollar().mint(Constants.getUsdtPool(), usdtShare.mul(amount).asUint256().add(1));
+            dollar().mint(Constants.getEthPool(), ethShare.mul(amount).asUint256().add(1));
+            dollar().mint(Constants.getWbtcPool(), wbtcShare.mul(amount).asUint256().add(1));
+            dollar().mint(Constants.getWbtcPool(), usdcShare.mul(amount).asUint256().add(1));
         }
     }
 

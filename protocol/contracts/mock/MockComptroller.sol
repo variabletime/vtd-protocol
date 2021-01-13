@@ -24,7 +24,7 @@ import "./MockState.sol";
 contract MockComptroller is Comptroller, MockState {
     constructor(address pool) public {
         _state.provider.dollar = new Dollar();
-        _state.provider.pool = pool;
+        // _state.provider.pool = pool; TODO
     }
 
     function mintToAccountE(address account, uint256 amount) external {

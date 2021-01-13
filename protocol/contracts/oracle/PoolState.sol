@@ -43,6 +43,7 @@ contract PoolStorage {
         IDAO dao;
         IDollar dollar;
         IERC20 univ2;
+        address peggedToken;
     }
     
     struct Balance {

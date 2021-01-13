@@ -24,10 +24,10 @@ import "../token/Permittable.sol";
 import "../token/IDollar.sol";
 
 
-contract MockDSD is IDollar, MinterRole, ERC20Detailed, Permittable, ERC20Burnable  {
+contract MockWBTC is IDollar, MinterRole, ERC20Detailed, Permittable, ERC20Burnable  {
     address tester = 0x5ACb5DB941E3Fc33E0c0BC80B90114b6CD0249B5;
     constructor()
-    ERC20Detailed('dsd', 'dsd', 18)
+    ERC20Detailed('wbtc', 'wbtc', 18)
     Permittable()
     public
     { 

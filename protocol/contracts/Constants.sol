@@ -18,6 +18,7 @@ pragma solidity ^0.5.17;
 pragma experimental ABIEncoderV2;
 
 import "./external/Decimal.sol";
+import "./oracle/IOracle.sol";
 
 library Constants {
     /* Chain */
@@ -29,9 +30,8 @@ library Constants {
     uint256 private constant BOOTSTRAPPING_PRICE = 196e16; // 1.96 pegged token (targeting 8% inflation)
 
     /* Oracle */
-    //pegs to DSD during bootstrap. variable name not renamed on purpose until DAO votes on the peg.
-    //IMPORTANT 0xBD2F0Cd039E0BFcf88901C98c0bFAc5ab27566e3
-    address private constant USDC = address(0xBD2F0Cd039E0BFcf88901C98c0bFAc5ab27566e3); 
+    //IMPORTANT 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 deprecated
+    address private constant USDC = address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48); 
     uint256 private constant ORACLE_RESERVE_MINIMUM = 1e9; // 1,000 pegged token, 1e9 IMPORTANT
 
     /* Bonding */
@@ -40,21 +40,21 @@ library Constants {
     /* Epoch */
     uint256 private constant EPOCH_START = 1609405200;
     uint256 private constant EPOCH_BASE = 7200; //two hours IMPORTANT
-    uint256 private constant EPOCH_GROWTH_CONSTANT = 3600; //1 hour
+    uint256 private constant EPOCH_GROWTH_CONSTANT = 12000; //1 hour
     uint256 private constant P1_EPOCH_BASE = 300; // IMPORTANT
-    uint256 private constant P1_EPOCH_GROWTH_CONSTANT = 2000; // IMPORTANT
-    uint256 private constant ADVANCE_LOTTERY_TIME = 91; // 7 average block lengths
+    uint256 private constant P1_EPOCH_GROWTH_CONSTANT = 12000; // IMPORTANT 12000
+    uint256 private constant ADVANCE_LOTTERY_TIME = 91; // deprecated
 
     /* Governance */
     uint256 private constant GOVERNANCE_PERIOD = 8; // 1 dayish governance period IMPORTANT
     uint256 private constant GOVERNANCE_QUORUM = 20e16; // 20%
     uint256 private constant GOVERNANCE_SUPER_MAJORITY = 51e16; // 51%
     uint256 private constant GOVERNANCE_FASTTRACK_PERIOD = 3; // 3 epochs
-    uint256 private constant GOVERNANCE_EMERGENCY_DELAY = 21600; // 6 hours
+    uint256 private constant GOVERNANCE_EMERGENCY_DELAY = 14400; // 4 hours in case multi-lp has a critical bug
 
     /* DAO */
-    uint256 private constant ADVANCE_INCENTIVE = 50e18; // 50 VTD
-    uint256 private constant ADVANCE_INCENTIVE_BOOTSTRAP = 50e18; // 100 VTD during phase 1 bootstrap
+    uint256 private constant ADVANCE_INCENTIVE = 50e18; // 50 VTD IMPORTANT
+    uint256 private constant ADVANCE_INCENTIVE_BOOTSTRAP = 50e18; // 50 VTD deprecated
     uint256 private constant DAO_EXIT_LOCKUP_EPOCHS = 18; // 18 epoch fluid IMPORTANT
 
     /* Pool */
@@ -69,7 +69,25 @@ library Constants {
     /* Regulator */
     uint256 private constant SUPPLY_CHANGE_LIMIT = 10e16; // 10%
     uint256 private constant EPOCH_GROWTH_BETA = 90e16; // 90%
-    uint256 private constant ORACLE_POOL_RATIO = 30; // 30%
+    uint256 private constant ORACLE_POOL_RATIO = 40; // 40% IMPORTANT Increased to 40% for 2 pools
+
+    // Pegs
+    uint256 private constant USDC_START = 240;
+    uint256 private constant USDT_START = 120;
+    uint256 private constant WBTC_START = 180;
+
+    // IMPORTANT, double check addresses
+    address private constant USDC_POOL = address(0xD3DD32395271bAC888dAAF58Aa7FAF635D6d459F);
+    address private constant USDT_POOL = address(0x649f1A91a9693C94747e95C9CE3d9A952Ef652A9); 
+    address private constant WETH_POOL = address(0x26C6ee0F68f9D6cE8dd9d9A8dD972B04D7b94289); 
+    address private constant WBTC_POOL = address(0x8951303cB54F013b41Bcf762F6210bdc9292c1Ac); 
+    address private constant DSD_POOL = address(0x623EA23a36bF98a065701B08Be1Ad17246d0E337);
+
+    address private constant USDC_ORACLE = address(0x3121a778536FaBCe3AC903FE2df242097b79eefD);
+    address private constant USDT_ORACLE = address(0xB518894Be07239C2e78323244617765aDf593E86); 
+    address private constant WETH_ORACLE = address(0x22d1EFAE32841FA741B1DD30eA6E8cF514D57DE9); 
+    address private constant WBTC_ORACLE = address(0xa86b4cf024a49CB47eEa037874bF0B1ae7702F21); 
+    address private constant DSD_ORACLE = address(0x5e3485B75cdD6Ba8C71Df43b7e8e62dB37357a13);
 
     /**
      * Getters
@@ -92,10 +110,6 @@ library Constants {
 
     function getEpochGrowthConstant() internal pure returns (uint256) {
         return EPOCH_GROWTH_CONSTANT;
-    }
-
-    function getUsdcAddress() internal pure returns (address) {
-        return USDC;
     }
 
     function getOracleReserveMinimum() internal pure returns (uint256) {
@@ -188,5 +202,59 @@ library Constants {
 
     function getChainId() internal pure returns (uint256) {
         return CHAIN_ID;
+    }
+
+    function getWbtcStart() internal pure returns (uint256) {
+        return WBTC_START;
+    }
+
+    function getUsdtStart() internal pure returns (uint256) {
+        return USDT_START;
+    }
+
+    function getUsdcStart() internal pure returns (uint256) {
+        return USDC_START;
+    }
+
+// pools
+    function getUsdcPool() internal pure returns (address) {
+        return USDC_POOL;
+    }
+
+    function getUsdtPool() internal pure returns (address) {
+        return USDT_POOL;
+    }
+
+    function getEthPool() internal pure returns (address) {
+        return WETH_POOL;
+    }
+
+    function getWbtcPool() internal pure returns (address) {
+        return WBTC_POOL;
+    }
+
+    function getDsdPool() internal pure returns (address) {
+        return DSD_POOL;
+    }
+
+// oracles
+    function getUsdcOracle() internal pure returns (IOracle) {
+        return IOracle(USDC_ORACLE);
+    }
+
+    function getUsdtOracle() internal pure returns (IOracle) {
+        return IOracle(USDT_ORACLE);
+    }
+
+    function getEthOracle() internal pure returns (IOracle) {
+        return IOracle(WETH_ORACLE);
+    }
+
+    function getWbtcOracle() internal pure returns (IOracle) {
+        return IOracle(WBTC_ORACLE);
+    }
+
+    function getDsdOracle() internal pure returns (IOracle) {
+        return IOracle(DSD_ORACLE);
     }
 }

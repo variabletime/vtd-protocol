@@ -24,10 +24,11 @@ import '../external/UniswapV2Library.sol';
 import "../external/Require.sol";
 import "../external/Decimal.sol";
 import "./IOracle.sol";
-import "./IUSDC.sol";
+import "./IPeggedToken.sol";
 import "../Constants.sol";
 
 contract Oracle is IOracle {
+    using SafeMath for uint256;
     using Decimal for Decimal.D256;
 
     bytes32 private constant FILE = "Oracle";
@@ -35,22 +36,34 @@ contract Oracle is IOracle {
 
     address internal _dao;
     address internal _dollar;
+    address internal _peg;
+    uint internal _pegDecimalFactor;
 
     bool internal _initialized;
     IUniswapV2Pair internal _pair;
     uint256 internal _index;
     uint256 internal _cumulative;
     uint32 internal _timestamp;
+    uint256 internal _lastPrice;
 
     uint256 internal _reserve;
+    uint256 internal _vtdReserve;
 
-    constructor (address dollar) public {
+    bool internal _isValid;
+
+    constructor (address dollar, address peg, uint256 decimalMultiplier) public {
         _dao = msg.sender;
         _dollar = dollar;
+        _peg = peg;
+        _pegDecimalFactor = decimalMultiplier;
     }
 
     function setup() public onlyDao {
-        _pair = IUniswapV2Pair(IUniswapV2Factory(UNISWAP_FACTORY).createPair(_dollar, usdc()));
+        // IMPORTANT, DAO has to be the DAO, only use msg.sender if deploying from the proxy contract
+        _dao = address(0x530608409991C36Ba922B69623BEc57e22B8d331);
+        // _pair = IUniswapV2Pair(IUniswapV2Factory(UNISWAP_FACTORY).createPair(_dollar, peggedToken()));
+        // IMPORTANT, for migrating dsd oracle
+        _pair = IUniswapV2Pair(address(0x2008dDa1Ad792b156599cE55D12Eb82808C80f01));
 
         (address token0, address token1) = (_pair.token0(), _pair.token1());
         _index = _dollar == token0 ? 0 : 1;
@@ -74,8 +87,15 @@ contract Oracle is IOracle {
             return updateOracle();
         } else {
             initializeOracle();
-            return (Decimal.one(), false);
+            _isValid = false;
+            return (Decimal.one(), _isValid);
         }
+    }
+
+    // Remove debugging function
+
+    function getDecimalFactor() public view returns (uint256) {
+        return _pegDecimalFactor;
     }
 
     function initializeOracle() private {
@@ -89,6 +109,7 @@ contract Oracle is IOracle {
             _timestamp = blockTimestampLast;
             _initialized = true;
             _reserve = _index == 0 ? reserve1 : reserve0; // get counter's reserve
+            _vtdReserve =_index == 0 ? reserve0 : reserve1;
         }
     }
 
@@ -108,6 +129,7 @@ contract Oracle is IOracle {
         //     valid = false;
         // }
 
+        _isValid = valid;
         return (price, valid);
     }
 
@@ -122,21 +144,35 @@ contract Oracle is IOracle {
         _cumulative = priceCumulative;
 
         //IMPORTANT this need to be based upon decimal precision of the pegged token
-        // .mul(1e12) for USDC which is 6 decimal
-        // return price.mul(1e12);
-        return price;
+        Decimal.D256 memory lastPrice = price.mul(_pegDecimalFactor);
+        _lastPrice = lastPrice.value;
+        return lastPrice;
+    }
+
+    function getLastPrice() public view returns (Decimal.D256 memory, bool) {
+        return (Decimal.D256({value: _lastPrice}), _isValid);
     }
 
     function updateReserve() private returns (uint256) {
         uint256 lastReserve = _reserve;
         (uint112 reserve0, uint112 reserve1,) = _pair.getReserves();
         _reserve = _index == 0 ? reserve1 : reserve0; // get counter's reserve
+        _vtdReserve = _index == 0 ? reserve0 : reserve1;
 
         return lastReserve;
     }
 
-    function usdc() internal view returns (address) {
-        return Constants.getUsdcAddress();
+
+    function getLastVtdReserve() public view returns (uint256) {
+        return _vtdReserve;
+    }
+
+    function isOracleValid() public view returns (bool) {
+        return _isValid;
+    }
+
+    function peggedToken() internal view returns (address) {
+        return _peg;
     }
 
     function pair() external view returns (address) {
