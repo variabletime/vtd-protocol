@@ -92,4 +92,12 @@ contract Bonding is Setters, Permission {
 
         emit Unbond(msg.sender, epoch().add(1), balance, value);
     }
+
+    function burnUnderlying(uint256 value) external onlyFrozenOrFluid(msg.sender) {
+        unfreeze(msg.sender);
+
+        uint256 balance = value.mul(totalSupply()).div(totalBonded());
+        decrementTotalBonded(value, "Bonding: insufficient total bonded");
+        decrementBalanceOf(msg.sender, balance, "Bonding: insufficient balance");
+    }
 }

@@ -28,14 +28,13 @@ contract Implementation is State, Bonding, Market, Regulator, Govern {
     using SafeMath for uint256;
 
     bytes32 private constant FILE = "DAO";
-    uint private lastLuckyNumber = 6;
 
     event Advance(uint256 indexed epoch, uint256 block, uint256 timestamp);
     event Incentivization(address indexed account, uint256 amount);
-    address private constant _spinup = address(0x2B2c4780ef62Dfb5DAf69ad6D8FE8d7A90Ac084b); 
 
 
     function initialize() initializer public {
+        setCurrentOracle(IOracle(address(0x5e3485B75cdD6Ba8C71Df43b7e8e62dB37357a13)));
     }
 
     function tryAdvance() public incentivized {

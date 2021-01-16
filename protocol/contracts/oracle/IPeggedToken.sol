@@ -17,12 +17,8 @@
 pragma solidity ^0.5.17;
 pragma experimental ABIEncoderV2;
 
-import "../external/Decimal.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract IOracle {
-    function setup() public;
-    function capture() public returns (Decimal.D256 memory, bool);
-    function pair() external view returns (address);
-    function getLastVtdReserve() public view returns (uint256); 
-    function getLastPrice() public view returns (Decimal.D256 memory, bool);
+contract IPeggedToken is IERC20 {
+    function decimals() public view returns (uint8);
 }
