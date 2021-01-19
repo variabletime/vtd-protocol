@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Variable Time Dollar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="a self-stabilizing dollar with dynamic epochs">
+    <script>
+      if (location.protocol !== "https:") {
+        location.protocol = "https:";
+      }
+      // deals with IPFS hosts not having always https
+    </script>
+    <link href="assets/css/loaders/loader-typing.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="assets/css/theme.css" rel="stylesheet" type="text/css" media="all" />
+    <link rel="preload" as="font" href="assets/fonts/Inter-UI-upright.var.woff2" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" as="font" href="assets/fonts/Inter-UI.var.woff2" type="font/woff2" crossorigin="anonymous">
+  </head>
+
+  <body data-smooth-scroll-offset="73">
+    <div class="loader">
+      <div class="loading-animation"></div>
+    </div>
+    <div class="navbar-container ">
+      <nav class="navbar navbar-expand-lg navbar-dark" data-overlay data-sticky="top">
+        <div class="container">
+          <a class="navbar-brand fade-page" href="index.html">
+            <img src="assets/img/logo.jpeg" height="35px" alt="VTD">
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+            <img class="icon navbar-toggler-open" src="assets/img/icons/interface/menu.svg" alt="menu interface icon" data-inject-svg />
+            <img class="icon navbar-toggler-close" src="assets/img/icons/interface/cross.svg" alt="cross interface icon" data-inject-svg />
+          </button>
+          <div class="collapse navbar-collapse justify-content-end">
+            <a href="app/#" class="btn btn-white ml-lg-3">Launch App</a>
+
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div data-overlay class="bg-primary text-light o-hidden position-relative">
+      <div class="position-absolute w-100 h-100 o-hidden top-0">
+        <div class="decoration right bottom scale-2">
+          <img class="bg-primary-2" src="assets/img/decorations/deco-blob-2.svg" alt="deco-blob-2 decoration" data-inject-svg />
+        </div>
+        <div class="decoration right bottom scale-3">
+          <img class="bg-white" src="assets/img/decorations/deco-dots-6.svg" alt="deco-dots-6 decoration" data-inject-svg />
+        </div>
+        <div class="decoration top left scale-2  d-none d-md-block">
+          <img class="bg-primary-3" src="assets/img/decorations/deco-blob-1.svg" alt="deco-blob-1 decoration" data-inject-svg />
+        </div>
+      </div>
+      <section class="min-vh-70 o-hidden d-flex flex-column justify-content-center">
+        <div class="container">
+          <div class="row justify-content-center text-center align-items-center">
+            <div class="col-xl-8 col-lg-9 col-md-10 layer-3" data-aos="fade-up" data-aos-delay="500">
+              <h1 class="display-3">
+                Variable Time Dollar
+          </h1>
+              <div class="mb-4">
+                <p class="lead px-xl-5">
+                  Variable Time Dollar (VTD) an algorithmic, dynamic supply stablecoin with variable epoch lengths based on the change in token supply.
+                </p>
+              </div>
+              <a href="app/" class="btn btn-lg btn-white mx-1">Launch App</a>
+              <a href="https://app.uniswap.org/#/swap?inputCurrency=0xBD2F0Cd039E0BFcf88901C98c0bFAc5ab27566e3&outputCurrency=0xf0E3543744AFcEd8042131582f2A19b6AEb82794" target="_blank" class="btn btn-lg btn-dark mx-1">Uniswap</a>
+              <a href="https://vtd-1.gitbook.io/variable-time-dollar/" target="_blank" class="btn btn-lg btn-secondary mx-1">FAQ</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="divider flip-x">
+        <img src="assets/img/dividers/divider-2.svg" alt="graphical divider" data-inject-svg />
+      </div>
+    </div>
+  
+    <section>
+      <div class="container">
+        <div class="row justify-content-center text-center mb-6">
+          <div class="col-xl-8 col-lg-9">
+            <h2 class="display-4 mx-xl-6">The Problem</h2>
+            <p class="lead">
+              Empty Set Dollar’s (ESD’s) 8 hour epochs generate low returns but longer expansion periods. Meanwhile, Dynamic Set Dollar’s (DSD’s) 2 hour epochs yield high returns by expanding the supply too quickly which creates massive selling pressure and short expansion periods. 
+            </p>
+          </div>
+        </div>
+        <div class="row justify-content-center text-center mb-6">
+          <div class="col-xl-8 col-lg-9">
+            <h2 class="display-4 mx-xl-6">The Solution</h2>
+            <p class="lead">
+              VTD is the first algorithmic stablecoin with dynamic supply that utilizes a range of 2-6 hour epochs based on momentum of the change in token supply. This solution solves the issues with ESD and DSD (and all their related forks that have flooded the market) by maintaining the benefits of long and short epochs while minimizing the downsides by throttling up and down the speed of supply expansion or contraction.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="has-divider bg-primary-alt">
+      <div class="container pt-5">
+        <div class="row justify-content-between align-items-center o-hidden">
+          <div class="col-md-6 col-lg-5">
+            <div class="d-flex mb-4" data-aos="fade-up" data-aos-delay="NaN">
+              <div class="process-circle bg-primary"></div>
+              <div class="ml-3">
+                <h5>Anti-bot Advance Function: </h5>
+                <p>
+                  To make it more fair for the community to call the Advance function, the VTD team has added a reverse dutch auction, which lets the market price the reward. The advance reward starts at 1 VTD, and increases 1 per every 5 seconds. The user willing to bid the lowest will win the advance.
+                </p>
+              </div>
+            </div>
+            <div class="d-flex mb-4" data-aos="fade-up" data-aos-delay="NaN">
+              <div class="process-circle bg-primary"></div>
+              <div class="ml-3">
+                <h5>Advance Function Built Into the UI and Fair Launch: </h5>
+                <p>
+                  VTD doesn’t believe that only the Team or Bots should be allowed to claim the Advance Rewards which is why we’re the first project to build the Advance function into the UI so anyone from the community can call it. With this feature anyone can see when the next Epoch is (remember our Epoch times are variable) and decide if it’s worth risking the gas to win the Advance Rewards lottery. VTD will have a fair launch with zero pre-mining. Even the Team needs to compete with the community to win the Advance Rewards.
+                </p>
+              </div>
+            </div>
+            <div class="d-flex mb-4" data-aos="fade-up" data-aos-delay="NaN">
+              <div class="process-circle bg-primary"></div>
+              <div class="ml-3">
+                <h5>Vote For Your Favorite Uniswap Liquidity Pair:</h5>
+                <p>
+                  VTD will implement multiple pegs soon. During the first phase VTD will be paired with DSD on uniswap to increase adoption and market penetration. VTD is the first stablecoin to be pegged to another algorithmic stablecoin. VTD will let the community vote on which liquidity pair it prefers: DSD, ESD, USDC, USDT or even Wrapped BTC? Perhaps we add more than one rewarded liquidity pair later? The community will decide. 
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6" data-aos="fade-left">
+            <img src="assets/img/saas-4.svg" alt="Image">
+          </div>
+        </div>
+      </div>
+      <div class="divider">
+        <img src="assets/img/dividers/divider-2.svg" alt="graphical divider" data-inject-svg />
+      </div>
+    </section>
+    <section>
+      <div class="container">
+        <div class="row justify-content-center text-center mb-6">
+          <div class="col-xl-8 col-lg-9">
+            <h2 class="display-4 mx-xl-6">How we stack up</h2>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-xl-10" data-aos="fade-up">
+            <table class="table pricing-table pricing-table-competitors">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col" class="bg-primary-alt">
+                    VTD
+                  </th>
+                  <th scope="col">
+                    DSD
+                  </th>
+                  <th scope="col">
+                    ESD
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">
+                    <span class="h6 mb-0 d-block">Hours Per Epoch</span>
+                    <span class="text-small text-muted"></span>
+                  </th>
+                  <td  class="bg-primary-alt">
+                    Dynamic between 2-6 hours
+                  </td>
+                  <td>
+                    2 Hours
+                  </td>
+                  <td>
+                    8 Hours
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <span class="h6 mb-0 d-block">APY During Expansion</span>
+                    <span class="text-small text-muted"></span>
+                  </th>
+                  <td class="bg-primary-alt">
+                    High but dynamic
+                  </td>
+                  <td>
+                    High
+                  </td>
+                  <td>
+                    Low
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <span class="h6 mb-0 d-block">Expansion Periods</span>
+                    <span class="text-small text-muted"></span>
+                  </th>
+                  <td class="bg-primary-alt">
+                    Middle
+                  </td>
+                  <td>
+                    Short
+                  </td>
+                  <td>
+                    Long
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <span class="h6 mb-0 d-block">Debt Cycle</span>
+                    <span class="text-small text-muted"></span>
+                  </th>
+                  <td class="bg-primary-alt">
+                    Medium
+                  </td>
+                  <td>
+                    Longer
+                  </td>
+                  <td>
+                    Shorter
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <span class="h6 mb-0 d-block">Dao Reward Split</span>
+                    <span class="text-small text-muted"></span>
+                  </th>
+                  <td class="bg-primary-alt">
+                    70%/30%
+                  </td>
+                  <td>
+                    60%/40%
+                  </td>
+                  <td>
+                    80%/20%
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <span class="h6 mb-0 d-block">Codebase</span>
+                    <span class="text-small text-muted"></span>
+                  </th>
+                  <td class="bg-primary-alt">
+                    Fork of DSD w/ Momentum based epoch timing and Bot protection
+                  </td>
+                  <td>Fork of ESD</td>
+                  <td>New and Audited</td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <span class="h6 mb-0 d-block">Governance</span>
+                    <span class="text-small text-muted"></span>
+                  </th>
+                  <td class="bg-primary-alt">
+                   Rapid proposals, changable pegs.
+                  </td>
+                  <td>
+                   Fast
+                  </td>
+                  <td>
+                   Conservative
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="bg-primary text-light o-hidden">
+      <div class="container">
+        <div class="row align-items-center min-vh-50">
+          <div class="col-lg-6 text-center text-lg-left mb-4 mb-lg-0">
+            <h1 class="display-3">To Recap</h1>
+            <div class="my-4">
+              As VTD comes out of a debt cycle and into expansion, it would likely start at shorter epoch periods (such as 2 hours per epoch since it was in a debt cycle) and expand the supply as fast as DSD. 
+
+But unlike DSD, VTD’s variable epoch times chosen by the DAO would slow down the token supply growth by lengthening the epoch hours (up to 6 hours per epoch) over time, similar to what the Federal Reserve does in periods of strong economic growth. In a supply contraction cycle, the epoch period would move in the opposite direction. 
+
+            </div>
+            <a href="app/#" class="btn btn-lg btn-primary-2">Open App</a>
+          </div>
+          <div class="col-lg-6 text-center" data-aos="fade-left">
+            <img src="assets/img/saas-sketch-1.svg" alt="Image" class="min-vw-60">
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="row justify-content-center mb-2">
+      <div class="col-auto">
+        <ul class="nav">
+          <li class="nav-item">
+            <a href="https://github.com/variabletime/vtd-protocol" target="_blank" class="nav-link">
+              <img class="icon " src="assets/img/icons/social/github.svg" alt="github social icon" data-inject-svg />
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="https://twitter.com/vtdfinance" target="_blank" class="nav-link">
+              <img class="icon " src="assets/img/icons/social/twitter.svg" alt="twitter social icon" data-inject-svg />
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="https://vtdollar.medium.com/" target="_blank" class="nav-link">
+              <img class="icon " src="assets/img/icons/social/medium.svg" alt="medium social icon" data-inject-svg />
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="https://t.me/vtdfinance" target="_blank" class="nav-link">
+              Telegram
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="https://discord.gg/9TmtMNxGMM" target="_blank" class="nav-link">
+              Discord
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="https://vtd-1.gitbook.io/variable-time-dollar/" target="_blank" class="nav-link">FAQ</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <a href="#" class="btn back-to-top btn-primary btn-round" data-smooth-scroll data-aos="fade-up" data-aos-offset="2000" data-aos-mirror="true" data-aos-once="false">
+      <img class="icon" src="assets/img/icons/theme/navigation/arrow-up.svg" alt="arrow-up icon" data-inject-svg />
+    </a>
+    <!-- Required vendor scripts (Do not remove) -->
+    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/js/popper.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.js"></script>
+
+    <!-- Optional Vendor Scripts (Remove the plugin script here and comment initializer script out of index.js if site does not use that feature) -->
+
+    <!-- AOS (Animate On Scroll - animates elements into view while scrolling down) -->
+    <script type="text/javascript" src="assets/js/aos.js"></script>
+    <!-- Clipboard (copies content from browser into OS clipboard) -->
+    <script type="text/javascript" src="assets/js/clipboard.min.js"></script>
+    <!-- Fancybox (handles image and video lightbox and galleries) -->
+    <script type="text/javascript" src="assets/js/jquery.fancybox.min.js"></script>
+    <!-- Flatpickr (calendar/date/time picker UI) -->
+    <script type="text/javascript" src="assets/js/flatpickr.min.js"></script>
+    <!-- Flickity (handles touch enabled carousels and sliders) -->
+    <script type="text/javascript" src="assets/js/flickity.pkgd.min.js"></script>
+    <!-- Ion rangeSlider (flexible and pretty range slider elements) -->
+    <script type="text/javascript" src="assets/js/ion.rangeSlider.min.js"></script>
+    <!-- Isotope (masonry layouts and filtering) -->
+    <script type="text/javascript" src="assets/js/isotope.pkgd.min.js"></script>
+    <!-- jarallax (parallax effect and video backgrounds) -->
+    <script type="text/javascript" src="assets/js/jarallax.min.js"></script>
+    <script type="text/javascript" src="assets/js/jarallax-video.min.js"></script>
+    <script type="text/javascript" src="assets/js/jarallax-element.min.js"></script>
+    <!-- jQuery Countdown (displays countdown text to a specified date) -->
+    <script type="text/javascript" src="assets/js/jquery.countdown.min.js"></script>
+    <!-- jQuery smartWizard facilitates steppable wizard content -->
+    <script type="text/javascript" src="assets/js/jquery.smartWizard.min.js"></script>
+    <!-- Plyr (unified player for Video, Audio, Vimeo and Youtube) -->
+    <script type="text/javascript" src="assets/js/plyr.polyfilled.min.js"></script>
+    <!-- Prism (displays formatted code boxes) -->
+    <script type="text/javascript" src="assets/js/prism.js"></script>
+    <!-- ScrollMonitor (manages events for elements scrolling in and out of view) -->
+    <script type="text/javascript" src="assets/js/scrollMonitor.js"></script>
+    <!-- Smooth scroll (animation to links in-page)-->
+    <script type="text/javascript" src="assets/js/smooth-scroll.polyfills.min.js"></script>
+    <!-- SVGInjector (replaces img tags with SVG code to allow easy inclusion of SVGs with the benefit of inheriting colors and styles)-->
+    <script type="text/javascript" src="assets/js/svg-injector.umd.production.js"></script>
+    <!-- TwitterFetcher (displays a feed of tweets from a specified account)-->
+    <script type="text/javascript" src="assets/js/twitterFetcher_min.js"></script>
+    <!-- Typed text (animated typing effect)-->
+    <script type="text/javascript" src="assets/js/typed.min.js"></script>
+    <!-- Required theme scripts (Do not remove) -->
+    <script type="text/javascript" src="assets/js/theme.js"></script>
+    <!-- Removes page load animation when window is finished loading -->
+    <script type="text/javascript">
+      window.addEventListener("load", function () {    document.querySelector('body').classList.add('loaded');  });
+    </script>
+
+  </body>
+
+</html>
