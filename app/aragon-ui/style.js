@@ -17,7 +17,7 @@ var textStyles = require('./text-styles.js');
 
 
 exports.GU = constants.GU;
-exports.RADIUS = constants.RADIUS;
+exports.RADIUS = 0;
 exports.BREAKPOINTS = breakpoints.BREAKPOINTS;
 exports.breakpoint = breakpoints.breakpoint;
 exports.springs = springs.springs;

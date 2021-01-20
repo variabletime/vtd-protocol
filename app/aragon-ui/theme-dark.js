@@ -5,7 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var dark = {
   _name: 'dark',
   _appearance: 'dark',
-  background: '#28334c',
+  background: '#000',
   border: '#2c3a58',
   overlay: '#28334c',
   content: '#FFFFFF',

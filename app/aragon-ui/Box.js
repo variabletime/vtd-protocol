@@ -117,7 +117,7 @@ function Box(_ref) {
   }, /*#__PURE__*/React__default.createElement(_StyledDiv, _extends._extends({
     as: heading ? 'section' : 'div'
   }, props, {
-    _css: fullWidth ? 0 : constants.RADIUS,
+    _css: fullWidth ? 0 : 0,
     _css2: theme.border,
     _css3: fullWidth ? '1px 0' : '1px',
     _css4: theme.surface,
