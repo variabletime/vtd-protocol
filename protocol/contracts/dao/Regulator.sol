@@ -26,45 +26,49 @@ contract Regulator is Comptroller {
     using SafeMath for uint256;
     using Decimal for Decimal.D256;
 
-    event SupplyIncrease(uint256 indexed epoch, uint256 price, uint256 newRedeemable, uint256 lessDebt, uint256 newBonded);
-    event SupplyDecrease(uint256 indexed epoch, uint256 price, uint256 newDebt);
+    event SupplyIncrease(uint256 indexed epoch, uint256 price, uint256 momentumPrice, uint256 newRedeemable, uint256 lessDebt, uint256 newBonded);
+    event SupplyDecrease(uint256 indexed epoch, uint256 price, uint256 momentumPrice, uint256 newDebt);
     event SupplyNeutral(uint256 indexed epoch);
     event EpochTimeVariable(uint256 epochPeriod);
 
     function step() internal {
         Decimal.D256 memory price = oracleCapture();
+        setEpochPrice(price);
 
-        if (price.greaterThan(Decimal.one())) {
+        Decimal.D256 memory newMomentum = getPriceMomentum().mul(Constants.getPriceMomentumBeta()).add(price.mul(Decimal.one().sub(Constants.getPriceMomentumBeta())));
+        if (price.greaterThan(newMomentum)) {
             setDebtToZero();
-            growSupply(price);
+            growSupply(price, newMomentum);
+            setPriceMomentum(newMomentum);
             return;
         }
 
-        if (price.lessThan(Decimal.one())) {
-            shrinkSupply(price);
+        if (price.lessThan(newMomentum)) {
+            shrinkSupply(price, newMomentum);
+            setPriceMomentum(newMomentum);
             return;
         }
 
         emit SupplyNeutral(epoch());
     }
 
-    function shrinkSupply(Decimal.D256 memory price) private {
-        Decimal.D256 memory delta = limit(Decimal.one().sub(price));
+    function shrinkSupply(Decimal.D256 memory price, Decimal.D256 memory baseline) private {
+        Decimal.D256 memory delta = debtLimit(baseline.sub(price).div(calcSupplyChangeFactor()));
         uint256 newDebt = delta.mul(totalNet()).asUint256();
         increaseDebt(newDebt);
         shrinkEpoch(delta);
 
-        emit SupplyDecrease(epoch(), price.value, newDebt);
+        emit SupplyDecrease(epoch(), price.value, baseline.value, newDebt);
         return;
     }
 
-    function growSupply(Decimal.D256 memory price) private {
-        Decimal.D256 memory delta = limit(price.sub(Decimal.one()).div(calcSupplyChangeFactor()));
+    function growSupply(Decimal.D256 memory price, Decimal.D256 memory baseline) private {
+        Decimal.D256 memory delta = limit(price.sub(baseline).div(calcSupplyChangeFactor()));
         uint256 newSupply = delta.mul(totalNet()).asUint256();
         (uint256 newRedeemable, uint256 lessDebt, uint256 newBonded) = increaseSupply(newSupply);
         growEpoch(delta);
 
-        emit SupplyIncrease(epoch(), price.value, newRedeemable, lessDebt, newBonded);
+        emit SupplyIncrease(epoch(), price.value, baseline.value, newRedeemable, lessDebt, newBonded);
     }
 
     function growEpoch(Decimal.D256 memory delta) private {
@@ -81,7 +85,12 @@ contract Regulator is Comptroller {
         Decimal.D256 memory supplyChangeLimit = Constants.getSupplyChangeLimit();
 
         return delta.greaterThan(supplyChangeLimit) ? supplyChangeLimit : delta;
+    }
 
+    function debtLimit(Decimal.D256 memory delta) private view returns (Decimal.D256 memory) {
+        Decimal.D256 memory supplyChangeLimit = Constants.getDebtChangeLimit();
+
+        return delta.greaterThan(supplyChangeLimit) ? supplyChangeLimit : delta;
     }
 
     function oracleCapture() private returns (Decimal.D256 memory) {

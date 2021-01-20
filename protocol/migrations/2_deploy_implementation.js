@@ -16,6 +16,9 @@ module.exports = function(deployer) {
       case 'mainnet':
         await deployTestnet(deployer);
         break;
+      case 'mainnet-fork':
+        await deployTestnet(deployer);
+        break;
       case 'development':
         await deployTestnet(deployer);
         break;

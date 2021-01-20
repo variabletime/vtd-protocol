@@ -100,4 +100,10 @@ contract Bonding is Setters, Permission {
         decrementTotalBonded(value, "Bonding: insufficient total bonded");
         decrementBalanceOf(msg.sender, balance, "Bonding: insufficient balance");
     }
+
+    function transferUnderlying(uint256 value, address destination) external onlyFrozenOrFluid(msg.sender) {
+        uint256 balance = value.mul(totalSupply()).div(totalBonded());
+        decrementBalanceOf(msg.sender, balance, "Bonding: insufficient balance");
+        incrementBalanceOf(destination, balance);
+    }
 }

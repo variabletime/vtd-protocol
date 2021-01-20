@@ -266,4 +266,13 @@ contract Getters is State {
             impl := sload(slot)
         }
     }
+    // prices
+
+    function getEpochPrice(uint256 epoch) internal returns (Decimal.D256 memory){
+        return Decimal.D256({value: _priceState.epochPrices[epoch]});
+    }
+
+    function getPriceMomentum() public view returns (Decimal.D256 memory) {
+        return Decimal.D256({value: _priceState.momentumState});
+    }
 }
