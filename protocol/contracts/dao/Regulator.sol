@@ -53,10 +53,12 @@ contract Regulator is Comptroller {
     }
 
     function shrinkSupply(Decimal.D256 memory price, Decimal.D256 memory baseline) private {
-        Decimal.D256 memory delta = debtLimit(baseline.sub(price).div(calcSupplyChangeFactor()));
+        Decimal.D256 memory trueDelta = baseline.sub(price).div(calcSupplyChangeFactor());
+        Decimal.D256 memory delta = debtLimit(trueDelta);
+
         uint256 newDebt = delta.mul(totalNet()).asUint256();
         increaseDebt(newDebt);
-        shrinkEpoch(delta);
+        shrinkEpoch(trueDelta);
 
         emit SupplyDecrease(epoch(), price.value, baseline.value, newDebt);
         return;
