@@ -35,9 +35,6 @@ contract Implementation is State, Bonding, Market, Regulator, Govern {
 
 
     function initialize() initializer public {
-        // set initial momentum price
-        (Decimal.D256 memory lastPrice, bool _) = oracle().getLastPrice();
-        setPriceMomentum(lastPrice.mul(Decimal.ratio(3,4)));
     }
 
     function tryAdvance() public incentivized {
