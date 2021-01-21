@@ -26,6 +26,7 @@ import "../Constants.sol";
 
 contract Implementation is State, Bonding, Market, Regulator, Govern {
     using SafeMath for uint256;
+    using Decimal for Decimal.D256;
 
     bytes32 private constant FILE = "DAO";
 
@@ -34,7 +35,9 @@ contract Implementation is State, Bonding, Market, Regulator, Govern {
 
 
     function initialize() initializer public {
-        setCurrentOracle(IOracle(address(0x5e3485B75cdD6Ba8C71Df43b7e8e62dB37357a13)));
+        // set initial momentum price
+        (Decimal.D256 memory lastPrice, bool _) = oracle().getLastPrice();
+        setPriceMomentum(lastPrice.mul(Decimal.ratio(3,4)));
     }
 
     function tryAdvance() public incentivized {

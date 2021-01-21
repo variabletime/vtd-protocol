@@ -102,8 +102,19 @@ contract Storage {
         mapping(uint256 => Epoch.State) epochs;
         mapping(address => Candidate.State) candidates;
     }
+
+    struct PriceState {
+        mapping(uint256 => uint256) epochPrices;
+        mapping(uint256 => uint256) epochInflows;
+        mapping(uint256 => uint256) epochOutflows;
+        uint256 momentumState;
+        uint256 beta1;
+        uint256 beta2;
+        uint256 streak;
+    }
 }
 
 contract State {
     Storage.State _state;
+    Storage.PriceState _priceState;
 }

@@ -210,4 +210,14 @@ contract Setters is State, Getters {
     function setCurrentOracle(IOracle newOracle) internal {
         _state.provider.oracle = newOracle;
     }
+
+    // prices
+
+    function setEpochPrice(Decimal.D256 memory price) internal {
+        _priceState.epochPrices[epoch()] = price.value;
+    }
+
+    function setPriceMomentum(Decimal.D256 memory price) internal {
+        _priceState.momentumState = price.value;
+    }
 }

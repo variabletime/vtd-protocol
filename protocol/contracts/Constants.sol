@@ -62,14 +62,16 @@ library Constants {
 
     /* Market */
     uint256 private constant COUPON_EXPIRATION = 180; //30 days
-    uint256 private constant DEBT_RATIO_CAP = 35e16; // 35%
+    uint256 private constant DEBT_RATIO_CAP = 20e16; // 20%
     uint256 private constant INITIAL_COUPON_REDEMPTION_PENALTY = 50e16; // 50%
     uint256 private constant COUPON_REDEMPTION_PENALTY_DECAY = 3600; // 1 hour
 
     /* Regulator */
     uint256 private constant SUPPLY_CHANGE_LIMIT = 10e16; // 10%
+    uint256 private constant DEBT_CHANGE_LIMIT = 5e16; // 5
     uint256 private constant EPOCH_GROWTH_BETA = 90e16; // 90%
     uint256 private constant ORACLE_POOL_RATIO = 40; // 40% IMPORTANT Increased to 40% for 2 pools
+    uint256 private constant PRICE_MOMENTUM_BETA = 85e16; // 70%
 
     // Pegs
     uint256 private constant USDC_START = 240;
@@ -192,9 +194,18 @@ library Constants {
         return Decimal.D256({value: SUPPLY_CHANGE_LIMIT});
     }
 
+    function getDebtChangeLimit() internal pure returns (Decimal.D256 memory) {
+        return Decimal.D256({value: DEBT_CHANGE_LIMIT});
+    }
+
     function getEpochGrowthBeta() internal pure returns (Decimal.D256 memory) {
         return Decimal.D256({value: EPOCH_GROWTH_BETA});
     }
+
+    function getPriceMomentumBeta() internal pure returns (Decimal.D256 memory) {
+        return Decimal.D256({value: PRICE_MOMENTUM_BETA});
+    }
+
 
     function getOraclePoolRatio() internal pure returns (uint256) {
         return ORACLE_POOL_RATIO;
