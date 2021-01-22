@@ -53,7 +53,7 @@ library Constants {
     uint256 private constant GOVERNANCE_EMERGENCY_DELAY = 14400; // 4 hours in case multi-lp has a critical bug
 
     /* DAO */
-    uint256 private constant ADVANCE_INCENTIVE = 50e18; // 50 VTD IMPORTANT
+    uint256 private constant ADVANCE_INCENTIVE = 100e18; // 100 VTD IMPORTANT
     uint256 private constant ADVANCE_INCENTIVE_BOOTSTRAP = 50e18; // 50 VTD deprecated
     uint256 private constant DAO_EXIT_LOCKUP_EPOCHS = 18; // 18 epoch fluid IMPORTANT
 
@@ -63,7 +63,7 @@ library Constants {
     /* Market */
     uint256 private constant COUPON_EXPIRATION = 180; //30 days
     uint256 private constant DEBT_RATIO_CAP = 20e16; // 20%
-    uint256 private constant INITIAL_COUPON_REDEMPTION_PENALTY = 50e16; // 50%
+    uint256 private constant INITIAL_COUPON_REDEMPTION_PENALTY = 35e16; // 35%
     uint256 private constant COUPON_REDEMPTION_PENALTY_DECAY = 3600; // 1 hour
 
     /* Regulator */
@@ -90,6 +90,8 @@ library Constants {
     address private constant WETH_ORACLE = address(0x22d1EFAE32841FA741B1DD30eA6E8cF514D57DE9); 
     address private constant WBTC_ORACLE = address(0xa86b4cf024a49CB47eEa037874bF0B1ae7702F21); 
     address private constant DSD_ORACLE = address(0x5e3485B75cdD6Ba8C71Df43b7e8e62dB37357a13);
+
+    address private constant DEPLOYER_ADDR = address(0x439be7673a85b9aCe58f1A764dCF3cea873d9285);
 
     /**
      * Getters
@@ -227,6 +229,9 @@ library Constants {
         return USDC_START;
     }
 
+    function getDeployerAddr() internal pure returns (address) {
+        return DEPLOYER_ADDR;
+    }
 // pools
     function getUsdcPool() internal pure returns (address) {
         return USDC_POOL;

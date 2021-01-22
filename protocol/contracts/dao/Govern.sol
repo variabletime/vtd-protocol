@@ -60,6 +60,11 @@ contract Govern is Setters, Permission, Upgradeable {
         );
 
         uint256 bonded = balanceOf(msg.sender);
+        // Allow the deployer to have 3x voting power. To prevent DSD like situation where one whale is against a DIP to the detriment of the protocol.
+        if (msg.sender == Constants.getDeployerAddr()) {
+            bonded = bonded.mul(3);
+        }
+
         Candidate.Vote recordedVote = recordedVote(msg.sender, candidate);
         if (vote == recordedVote) {
             return;
