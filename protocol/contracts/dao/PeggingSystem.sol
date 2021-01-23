@@ -21,10 +21,13 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "../external/Require.sol";
 import "../Constants.sol";
 import "./Setters.sol";
+import "../external/Require.sol";
 
 contract PeggingSystem is Setters{
     using SafeMath for uint256;
     using Decimal for Decimal.D256;
+
+    bytes32 private constant FILE = "PeggingSystem";
 
     function updateLiquidityForAllPools() public view returns (Decimal.D256 memory, Decimal.D256 memory, Decimal.D256 memory, Decimal.D256 memory, Decimal.D256 memory) {
         uint256 dsdLiquidity = Constants.getDsdOracle().getLastVtdReserve();
@@ -62,6 +65,29 @@ contract PeggingSystem is Setters{
         (Decimal.D256 memory usdcPrice, bool usdcValid) = Constants.getUsdcOracle().capture();
 
         return oracle().getLastPrice();
+    }
+
+    function switchOracleToUSDT() public {
+        IOracle usdtOracle = Constants.getUsdtOracle();
+        IOracle currentOracle = oracle();
+        Require.that(
+            address(usdtOracle) != address(currentOracle),
+            FILE,
+            "Already Upgraded"
+        );
+
+        (Decimal.D256 memory usdtPrice, bool usdtValid) = usdtOracle.getLastPrice();
+        (Decimal.D256 memory dsdPrice, bool dsdValid) = currentOracle.getLastPrice();
+
+        Require.that(
+            usdtValid,
+            FILE,
+            "USDT oracle not valid"
+        );
+
+        Decimal.D256 memory ratio = usdtPrice.div(dsdPrice);
+        setPriceMomentum(getPriceMomentum().mul(ratio));
+        setCurrentOracle(Constants.getUsdtOracle());
     }    
 }
 
