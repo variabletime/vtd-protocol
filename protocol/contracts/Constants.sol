@@ -77,7 +77,7 @@ library Constants {
     uint256 private constant USDC_START = 240;
     uint256 private constant USDT_START = 120;
     uint256 private constant WBTC_START = 180;
-    uint256 private constant DSD_END = 150;
+    uint256 private constant DSD_END = 130;
 
     // IMPORTANT, double check addresses
     address private constant USDC_POOL = address(0xD3DD32395271bAC888dAAF58Aa7FAF635D6d459F);
