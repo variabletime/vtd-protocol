@@ -35,7 +35,9 @@ contract Regulator is Comptroller {
         Decimal.D256 memory price = oracleCapture();
         setEpochPrice(price);
 
-        Decimal.D256 memory newMomentum = getPriceMomentum().mul(Constants.getPriceMomentumBeta()).add(price.mul(Decimal.one().sub(Constants.getPriceMomentumBeta())));
+        // When it contracts, momentum factor is decreased to account for small numbers
+        Decimal.D256 memory momentumBeta = price.greaterThan(getPriceMomentum()) ? Constants.getPriceMomentumBeta(): Constants.getPriceMomentumBeta().pow(2);
+        Decimal.D256 memory newMomentum = getPriceMomentum().mul(momentumBeta).add(price.mul(Decimal.one().sub(momentumBeta)));
         if (price.greaterThan(newMomentum)) {
             setDebtToZero();
             growSupply(price, newMomentum);
@@ -53,7 +55,7 @@ contract Regulator is Comptroller {
     }
 
     function shrinkSupply(Decimal.D256 memory price, Decimal.D256 memory baseline) private {
-        Decimal.D256 memory trueDelta = baseline.sub(price).div(calcSupplyChangeFactor());
+        Decimal.D256 memory trueDelta = baseline.sub(price).div(baseline).div(calcSupplyChangeFactor());
         Decimal.D256 memory delta = debtLimit(trueDelta);
 
         uint256 newDebt = delta.mul(totalNet()).asUint256();
@@ -65,7 +67,7 @@ contract Regulator is Comptroller {
     }
 
     function growSupply(Decimal.D256 memory price, Decimal.D256 memory baseline) private {
-        Decimal.D256 memory delta = limit(price.sub(baseline).div(calcSupplyChangeFactor()));
+        Decimal.D256 memory delta = limit(price.sub(baseline).div(baseline).div(calcSupplyChangeFactor()));
         uint256 newSupply = delta.mul(totalNet()).asUint256();
         (uint256 newRedeemable, uint256 lessDebt, uint256 newBonded) = increaseSupply(newSupply);
         growEpoch(delta);
