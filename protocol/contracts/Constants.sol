@@ -53,7 +53,7 @@ library Constants {
     uint256 private constant GOVERNANCE_EMERGENCY_DELAY = 14400; // 4 hours in case multi-lp has a critical bug
 
     /* DAO */
-    uint256 private constant ADVANCE_INCENTIVE = 100e18; // 100 VTD IMPORTANT
+    uint256 private constant ADVANCE_INCENTIVE = 300e18; // 300 VTD IMPORTANT
     uint256 private constant ADVANCE_INCENTIVE_BOOTSTRAP = 50e18; // 50 VTD deprecated
     uint256 private constant DAO_EXIT_LOCKUP_EPOCHS = 18; // 18 epoch fluid IMPORTANT
 
@@ -77,6 +77,7 @@ library Constants {
     uint256 private constant USDC_START = 240;
     uint256 private constant USDT_START = 120;
     uint256 private constant WBTC_START = 180;
+    uint256 private constant DSD_END = 150;
 
     // IMPORTANT, double check addresses
     address private constant USDC_POOL = address(0xD3DD32395271bAC888dAAF58Aa7FAF635D6d459F);
@@ -227,6 +228,10 @@ library Constants {
 
     function getUsdcStart() internal pure returns (uint256) {
         return USDC_START;
+    }
+
+    function getDsdEnd() internal pure returns (uint256) {
+        return DSD_END;
     }
 
     function getDeployerAddr() internal pure returns (address) {

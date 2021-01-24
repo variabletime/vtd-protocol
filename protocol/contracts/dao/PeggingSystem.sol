@@ -49,6 +49,10 @@ contract PeggingSystem is Setters{
             usdcLiquidity = 0;
         }
 
+        if (epoch() > Constants.getDsdEnd()) {
+            dsdLiquidity = 0;
+        }
+
         uint256 totalLiquidity = dsdLiquidity.add(usdtLiquidity).add(ethLiquidity).add(wbtcLiquidity).add(usdcLiquidity);
         if (totalLiquidity == 0) {
             totalLiquidity = 1; //prevent division by zero
